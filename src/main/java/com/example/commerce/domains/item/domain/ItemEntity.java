@@ -42,9 +42,9 @@ public class ItemEntity extends BaseEntity {
     public void removeStockQuantity(int orderQuantity){
         int restStockQuantity = this.stockQuantity - orderQuantity;
 
-   /*     if(restStockQuantity<0)
-            throw new NotEnoughStockQuantityException();
-*/
+        if(restStockQuantity<0)
+            throw new IllegalStateException("재고가 없습니다.");
+
         this.stockQuantity = restStockQuantity;
     }
 
