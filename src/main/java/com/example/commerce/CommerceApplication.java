@@ -12,5 +12,6 @@ public class CommerceApplication {
 		SpringApplication.run(CommerceApplication.class, args);
 
 		System.out.println("dgdgd");
+
 	}
 }
