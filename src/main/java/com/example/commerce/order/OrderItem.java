@@ -1,26 +1,31 @@
 package com.example.commerce.order;
 
 import com.example.commerce.item.Item;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-public class OtherItem {
+@Getter @Setter
+public class OrderItem {
 
     @Id @GeneratedValue
-    @Column(name = "other_item_id")
+    @Column(name = "order_item_id")
     private Long id;
 
     private int orderPrice; // 주문가격
     private int orderCount; // 주문 수량
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
+
+
 }
