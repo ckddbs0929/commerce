@@ -20,7 +20,7 @@ public class MemberRepository {
     public Member findOne(Long id){
         return em.find(Member.class, id);
     }
-    //리스트 조회
+    //전체(리스트) 조회
     public List<Member> findAll(){
 /*        List<Member> result = em.createQuery("select m from Member m", Member.class)
                 .getResultList();
