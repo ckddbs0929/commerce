@@ -16,7 +16,7 @@ public class MemberRepository {
     public void save(Member member){
         em.persist(member);
     }
-    //조회
+    //조회 -> primary key를 기준으로 조회!
     public Member findOne(Long id){
         return em.find(Member.class, id);
     }
