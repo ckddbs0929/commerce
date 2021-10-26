@@ -39,4 +39,9 @@ public class MemberService {
     public Member findOne(Long memberId){
         return memberRepository.findOne(memberId);
     }
+
+/*    @Transactional(readOnly = true)
+    public List<Member> findName(String name){
+        return memberRepository.findByName(name);
+    }*/
 }

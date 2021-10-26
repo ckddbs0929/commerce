@@ -1,10 +1,12 @@
 package com.example.commerce.order;
 
+import com.example.commerce.common.DeliveryStatus;
 import com.example.commerce.common.OrderStatus;
 import com.example.commerce.delivery.Delivery;
 import com.example.commerce.member.Member;
 import lombok.Getter;
 import lombok.Setter;
+import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,7 +30,7 @@ public class Order {
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> list = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
@@ -44,13 +46,49 @@ public class Order {
     }
 
     public void addOrderItem(OrderItem orderItem){
-        list.add(orderItem);
+        orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
 
     public void setDelivery(Delivery delivery){
         this.delivery = delivery;
         delivery.setOrder(this);
+    }
+
+    // 생성 메서드
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems){
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for(OrderItem orderItem : orderItems){
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    // 비즈니스 로직//
+
+    // 주문취소
+    public void cancel(){
+        if(delivery.getStatus()== DeliveryStatus.COMP){
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가합니다.");
+        }
+
+        this.setStatus(OrderStatus.CANCEL);
+        for(OrderItem orderItem : orderItems){
+            orderItem.cancel();
+        }
+    }
+
+    // 전체 주문 가격조회
+    public int getTotalPrice(){
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItems){
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
     }
 
 }

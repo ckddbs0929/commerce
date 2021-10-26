@@ -47,4 +47,10 @@ public class MemberServiceTest {
         // then
         fail("예외 발생 되야함");
     }
+
+/*    @Test
+    public void 이름으로찾기() throws Exception{
+        Member member = new Member();
+        memberService.findName("KIM CHUL SU");
+    }*/
 }
