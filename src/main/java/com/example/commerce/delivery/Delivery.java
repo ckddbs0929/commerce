@@ -3,7 +3,6 @@ package com.example.commerce.delivery;
 import com.example.commerce.common.Address;
 import com.example.commerce.common.DeliveryStatus;
 import com.example.commerce.order.Order;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
