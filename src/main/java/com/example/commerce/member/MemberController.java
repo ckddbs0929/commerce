@@ -22,6 +22,8 @@ public class MemberController {
         model.addAttribute("memberForm", new MemberForm());
         return "members/createMemberForm";
     }
+    // new MemberForm()을 입력해줌으로써 아무 내용은 없지만 렌더링을 해줌
+    // MemberForm 클래스에 있는 모든 변수들을 html파일에 입력해놓은 변수와 일치시켜 화면으로 전달
 
     @PostMapping(value = "/members/new")
     public String create(@Valid MemberForm form, BindingResult result){
@@ -35,6 +37,7 @@ public class MemberController {
         Member member = new Member();
 
         member.setName(form.getName());
+        member.setPassword(form.getPassword());
         member.setAddress(address);
 
         memberService.join(member);
