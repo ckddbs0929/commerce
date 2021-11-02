@@ -41,4 +41,9 @@ public class MemberRepository {
                 .getResultList();
     }
 
+    public List<Member> findBypass(String password){
+        return em.createQuery("select m from Member m where m.password = :password", Member.class)
+                .setParameter("password", password)
+                .getResultList();
+    }
 }

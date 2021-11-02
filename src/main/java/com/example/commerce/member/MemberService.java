@@ -40,8 +40,15 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
-    /*@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<Member> findName(String name){
         return memberRepository.findByName(name);
-    }*/
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<Member> findPass(String password){
+        return memberRepository.findBypass(password);
+    }
+
 }
