@@ -1,5 +1,6 @@
 package com.example.commerce.order;
 
+import com.example.commerce.common.DeliveryStatus;
 import com.example.commerce.delivery.Delivery;
 import com.example.commerce.item.Item;
 import com.example.commerce.item.ItemRepository;
@@ -31,6 +32,7 @@ public class OrderService {
         //배송정보 생성
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
+        delivery.setStatus(DeliveryStatus.READY);
 
         // 주문상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
@@ -53,7 +55,7 @@ public class OrderService {
     }
 
     //검색
-    public List<Order> searchOrder(OrderSearch orderSearch){
-        return  orderRepository.findAll(orderSearch);
+    public List<Order> findOrders(OrderSearch orderSearch){
+        return  orderRepository.findAllByCriteria(orderSearch);
     }
 }

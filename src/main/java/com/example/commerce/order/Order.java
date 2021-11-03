@@ -6,7 +6,6 @@ import com.example.commerce.delivery.Delivery;
 import com.example.commerce.member.Member;
 import lombok.Getter;
 import lombok.Setter;
-import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,7 +24,7 @@ public class Order {
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_id") // Member 테이블과 관계를 맺는 외래키
     private Member member;
 
@@ -40,7 +39,7 @@ public class Order {
 
 
     // 연관관계 메서드
-    public void setMember(Member member){
+    public void setMember(Member member) {
         this.member = member;
         member.getOrders().add(this);
     }
@@ -55,12 +54,13 @@ public class Order {
         delivery.setOrder(this);
     }
 
-    // 생성 메서드
-    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems){
+    //==생성 메서드==//
+    public static Order createOrder(Member member, Delivery delivery,
+                                    OrderItem... orderItems) {
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);
-        for(OrderItem orderItem : orderItems){
+        for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
         order.setStatus(OrderStatus.ORDER);
@@ -68,24 +68,22 @@ public class Order {
         return order;
     }
 
-    // 비즈니스 로직//
-
-    // 주문취소
-    public void cancel(){
-        if(delivery.getStatus()== DeliveryStatus.COMP){
-            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가합니다.");
+    //==비즈니스 로직==//
+    /** 주문 취소 */
+    public void cancel() {
+        if (delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
         }
-
         this.setStatus(OrderStatus.CANCEL);
-        for(OrderItem orderItem : orderItems){
+        for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }
     }
-
-    // 전체 주문 가격조회
-    public int getTotalPrice(){
+    //==조회 로직==//
+    /** 전체 주문 가격 조회 */
+    public int getTotalPrice() {
         int totalPrice = 0;
-        for(OrderItem orderItem : orderItems){
+        for (OrderItem orderItem : orderItems) {
             totalPrice += orderItem.getTotalPrice();
         }
         return totalPrice;
